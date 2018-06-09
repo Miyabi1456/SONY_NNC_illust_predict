@@ -8,4 +8,4 @@
 
 使い方:
     predict_inputディレクトリに分類したい画像を保存しておく。
-    illust_predict.pyを実行すると、predict_output下の2つのフォルダにそれぞれ分類される。
+    illust_predict.pyを実行すると、predict_output下の2つのフォルダに画像が分類される。
