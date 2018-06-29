@@ -31,13 +31,13 @@ class Predict():
         self.x = nn.Variable((1,3,256,256)) #(枚数,色,高さ,幅)
 
         #パラメタの読み込みparam
-        nn.load_parameters(os.path.join(current_dir,"20180627_215859.h5"))
+        nn.load_parameters(os.path.join(current_dir,"parameters.h5"))
 
         #推論ネットワークの構築
         self.y = self.network(self.x,test=True) 
 
 
-    def network(self ,x, test=False):
+    def network(self, x, test=False):
         # Input:x -> 3,256,256
         # Convolution_5 -> 16,255,255
         h = PF.convolution(x, 16, (2,2), (0,0), name='Convolution_5')
@@ -84,9 +84,23 @@ class Predict():
         h = F.relu(h, True)
         # MaxPooling_3 -> 128,15,15
         h = F.max_pooling(h, (2,2), (2,2), False)
+        # Convolution_8 -> 256,14,14
+        h = PF.convolution(h, 256, (2,2), (0,0), name='Convolution_8')
+        # BatchNormalization_10
+        h = PF.batch_normalization(h, (1,), 0.9, 0.0001, not test, name='BatchNormalization_10')
+        # ReLU_7
+        h = F.relu(h, True)
+        # MaxPooling_5 -> 256,7,7
+        h = F.max_pooling(h, (2,2), (2,2), False)
+        # Convolution -> 256,6,6
+        h = PF.convolution(h, 256, (2,2), (0,0), name='Convolution')
+        # BatchNormalization_8
+        h = PF.batch_normalization(h, (1,), 0.9, 0.0001, not test, name='BatchNormalization_8')
+        # ReLU
+        h = F.relu(h, True)
+        # AveragePooling -> 256,1,1
+        h = F.average_pooling(h, (6,6), (6,6))
 
-        # Affine_2 -> 256
-        h = PF.affine(h, (256,), name='Affine_2')
         # BatchNormalization_6
         h = PF.batch_normalization(h, (1,), 0.9, 0.0001, not test, name='BatchNormalization_6')
         # ReLU_5
