@@ -37,7 +37,7 @@ class Predict():
         self.y = self.network(self.x,test=True) 
 
 
-    def network(self, x, test=False):
+    def network(self ,x, test=False):
         # Input:x -> 3,256,256
         # Convolution_5 -> 16,255,255
         h = PF.convolution(x, 16, (2,2), (0,0), name='Convolution_5')
@@ -103,6 +103,8 @@ class Predict():
         h = F.average_pooling(h, (6,6), (6,6))
         # BatchNormalization_6
         h = PF.batch_normalization(h, (1,), 0.9, 0.0001, not test, name='BatchNormalization_6')
+        # PReLU_9
+        h = PF.prelu(h, 1, False, name='PReLU_9')
         # Affine -> 1
         h = PF.affine(h, (1,), name='Affine')
         # BatchNormalization_3
