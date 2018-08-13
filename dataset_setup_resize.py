@@ -6,8 +6,8 @@ from itertools import chain
 import glob
 
 #画像ファイルへのパスをリスト形式でimg_data,ファイル名をimg_nameに代入
-input_dir = "./illust"
-output_dir = "./out"
+input_dir = "./original_size/other_data_20180812"
+output_dir = "./other_data_20180812"
 
 ext_list = ["jpg", "png","jpeg"]
 img_path_list = list(chain.from_iterable([glob.glob(os.path.join(input_dir, "*." + ext)) for ext in ext_list]))
@@ -25,7 +25,7 @@ y = 0 #トリミング始点
 短辺側の解像度が目的のサイズになるようにリサイズ,その後中央をトリミングする.
 """
 
-for img_path in img_path_list:
+for i,img_path in enumerate(img_path_list):
     img = cv2.imread(img_path)
     size_x = img.shape[1]
     size_y = img.shape[0]
@@ -49,3 +49,7 @@ for img_path in img_path_list:
 
 
     cv2.imwrite(os.path.join(output_dir,os.path.basename(img_path)),img)
+
+    #プログレスバー
+    bar = "#" * int(50*i/len(img_path_list)) + " " * int((50*(1-i/len(img_path_list))))
+    print("\r[{0}]{1}/{2} 処理中".format(bar,i+1,len(img_path_list)),end="")
