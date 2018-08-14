@@ -37,7 +37,7 @@ class Predict():
         self.y = self.network(self.x,test=True) 
 
 
-    def network(self ,x, test=False):
+    def network(self, x, test=False):
         # Input:x -> 3,256,256
         # Convolution_5 -> 16,255,255
         h = PF.convolution(x, 16, (2,2), (0,0), name='Convolution_5')
